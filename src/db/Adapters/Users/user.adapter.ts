@@ -36,7 +36,7 @@ export class UserAdapter implements User {
     }
 
     async findOne(searchTerm){
-        const user = await this.Repository.findOne(searchTerm)
+        const user = await this.Repository.findBy({ email: searchTerm})
         return user
     }
 

@@ -10,4 +10,6 @@ export class AuthNetwork{
     async login( req:Request, res: Response ){
         
     }
+
+    
 }

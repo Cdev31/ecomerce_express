@@ -6,4 +6,6 @@ export interface ConfigEnv {
     db_url?: string
     db_e2e?: string
     jwtSecret: string
+    googleSecret: string
+    googleClientId: string
 }

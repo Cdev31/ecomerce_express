@@ -8,7 +8,9 @@ const JoiValidationSchema = Joi.object({
     port: Joi.number().integer().required(),
     db_url: Joi.string().required(),
     db_e2e: Joi.string().required(),
-    jwtSecret: Joi.string().required()
+    jwtSecret: Joi.string().required(),
+    googleSecret: Joi.string().required(),
+    googleClientId: Joi.string().required()
 })
 
 export const validationEnv = ( loader: ConfigEnv )=>{
