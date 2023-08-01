@@ -6,44 +6,86 @@ import { UserService } from "./service"
 const service = new UserService(new UserAdapter())
 
 export class UserNetwork {
+    response: unknown
+    message: string
+    status: number
 
-    async find( req: Request, res: Response ){
+    constructor(){
+        this.response =  null
+        this.message = 'Success',
+        this.status = 200
+    }
+
+    async find(){
         const response = await service.find()
 
-        res.status(200).json(response)
+       return {
+         response: response,
+         status: this.status,
+         message: this.message
+       }
     }
 
-    async findById( req: Request, res: Response ){
-        const { id }  = req.params
+    async findById( id:string){
+       
+        const isUser = await service.findById(id)
 
-        const response = await service.findById(id)
+        if (isUser.length === 0)
+            this.response = []
+            this.message = `User with id: ${id} not found`
+            this.status =  404
+        
 
-        res.status(200).json(response)
+        return {
+            message: this.message,
+            response: isUser,
+            status: this.status
+        }
     }
 
-    async create(newData, _: Request, res: Response, next: NextFunction ){
+    async create(newData){
 
         const response = await service.create(newData)
 
-        res.status(201).json(response)
+        return {
+            message: this.message,
+            response: response,
+            status: this.status
+        }
     }
 
-    async update( req: Request, res: Response ){
-
-        const body = req.body
-        const { id } = req.params
+    async update( id: string, body ){
 
         const response = await service.update(id,body)
 
-        res.status(200).json(response)
+        if( response.affected === 0) {
+            this.message = 'Not updated',
+            this.response = response.affected
+            this.status = 400
+        }
+
+        return{
+            message: this.message,
+            response: response,
+            status: this.status
+        }
     }
 
-    async delete( req: Request, res: Response ){
+    async delete( id: string ){
 
-        const { id } = req.params
+        
+       const response = await service.delete(id)
 
-        const response = await service.delete(id)
+       if( response.affected === 0 ){
+          this.message = 'Not deleted',
+          this.response = response.affected,
+          this.status = 400
+       }
 
-        res.status(200).json(response)
+       return {
+          message: this.message,
+          response: true,
+          status: this.status
+       }
     }
 }

@@ -2,7 +2,6 @@ import Joi, {} from "joi";
 import { ConfigEnv } from "./config.interface";
 
 
-
 const JoiValidationSchema = Joi.object({
     env: Joi.string().required(),
     port: Joi.number().integer().required(),

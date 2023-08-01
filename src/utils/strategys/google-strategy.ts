@@ -20,10 +20,9 @@ export const googleStrategy = new GoogleStrategy.OAuth2Strategy(options, async (
     }
     else{
         let newUser = {
-            firstName: profile.name?.familyName,
-            lastName: profile.name?.givenName,
+            firstName: profile.name?.givenName,
+            lastName: profile.name?.familyName,
             email: profile.emails?.[0]?.value,
-            password: profile.id,
             google: true
         }
     

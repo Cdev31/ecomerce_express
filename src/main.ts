@@ -1,4 +1,3 @@
-
 import cors from 'cors'
 
 import { config } from './config/config.env'
@@ -7,7 +6,6 @@ import './utils/strategys'
 
 const app = createApp()
 app.use( cors() )
-
 
 
 app.listen(config.port,()=>{

@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router , Request, Response, NextFunction } from 'express'
 
 import { UserNetwork } from './network'
 import { hashPassword, validationSchema } from '../../middlewares/validate.handle'
@@ -8,16 +8,51 @@ const userRouter = Router()
 const userNetwork = new UserNetwork()
 
 
-userRouter.get('/', userNetwork.find )
+userRouter.get('/', async ( _: Request, res: Response )=>{
 
-userRouter.get('/:id', userNetwork.findById )
+    const { response, message, status } = await userNetwork.find()
+
+    res.status(status).json({ message , response })
+    
+})
+
+userRouter.get('/:id', async ( req: Request, res: Response )=>{
+    
+    const { id }  = req.params
+
+    const { response, status, message } = await userNetwork.findById( id )
+
+    res.status(status).json({ response, message })
+
+})
 
 userRouter.post('/',
 validationSchema(CreateUserSchema,'body'), hashPassword, 
-userNetwork.create )
+async (newData, _: Request, res: Response, next: NextFunction )=>{
 
-userRouter.patch('/:id', userNetwork.update )
+    const { response, status, message } = await userNetwork.create(newData)
 
-userRouter.delete('/:id', userNetwork.delete )
+    res.status(status).json({ response, message })
+}
+)
+
+userRouter.patch('/:id', async ( req: Request, res: Response )=>{
+
+    const body = req.body
+    const { id } = req.params
+
+    const { response, status, message } = await userNetwork.update(id, body)
+
+    res.status(status).json({ response, message })
+})
+
+userRouter.delete('/:id', async ( req: Request, res: Response )=>{
+
+    const { id } = req.params
+
+    const { response, status, message } = await userNetwork.delete( id ) 
+
+    res.status(status).json({ response, message })
+} )
 
 export { userRouter }

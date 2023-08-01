@@ -38,7 +38,7 @@ export class UserModel {
 
     @Column({
         type: 'varchar',
-        nullable: false
+        nullable: true
     })
     password: string
 

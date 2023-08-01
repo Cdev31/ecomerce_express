@@ -1,12 +1,18 @@
-import { Router } from 'express'
+import { Router, Request, Response } from 'express'
 
 import { AuthNetwork } from './network'
-import passport, { session } from 'passport'
+import passport from 'passport'
 
 const authRouter = Router()
 const authNetwork = new AuthNetwork()
 
-authRouter.post('/login', authNetwork.login )
+
+authRouter.post('/register', async ( req: Request, res: Response )=>{
+
+})
+
+authRouter.post('/login', 
+passport.authenticate('local', {session: false}) )
 
 //authRouter.post('/google/login', )
 
