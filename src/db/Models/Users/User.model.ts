@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne,  PrimaryGeneratedColumn } from "typeorm";
+import { RoleModel } from "./User-role.model";
 
 
 @Entity({name: 'users'})
@@ -41,6 +42,10 @@ export class UserModel {
         nullable: true
     })
     password: string
+
+    @ManyToOne(()=> RoleModel, { nullable: false})
+    @JoinColumn({name: 'role'})
+    role: RoleModel
 
     @Column({
         type: 'boolean',

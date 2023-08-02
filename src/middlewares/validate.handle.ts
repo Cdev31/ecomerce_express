@@ -11,13 +11,12 @@ export const validationSchema = (Schema, property)=>{
         Object.assign( schema, data )
 
         const error: ValidationError[] = await validate(schema)
-
         if ( error.length > 0){
             const erros = error.map( e => e.constraints )
             res.status(400).json(erros)
         }
 
-        next()
+        return next()
     }
 }
 

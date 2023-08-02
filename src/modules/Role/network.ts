@@ -1,10 +1,10 @@
 
-import { UserAdapter } from "../../db/Adapters/Users/user.adapter"
-import { UserService } from "./service"
+import { RoleAdapter } from "../../db/Adapters/Role/role.adapter"
+import { RoleService} from "./service"
 
-const service = new UserService(new UserAdapter())
+const service = new RoleService(new RoleAdapter())
 
-export class UserNetwork {
+export class RoleNetwork {
     response: unknown
     message: string
     status: number
@@ -27,17 +27,17 @@ export class UserNetwork {
 
     async findById( id:string){
        
-        const isUser = await service.findById(id)
-        
-        if (isUser.length < 0)
+        const isRole = await service.findById(id)
+
+        if (isRole.length === 0)
             this.response = []
-            this.message = `User with id: ${id} not found`
+            this.message = `Role with id: ${id} not found`
             this.status =  404
         
 
         return {
             message: this.message,
-            response: isUser,
+            response: isRole,
             status: this.status
         }
     }

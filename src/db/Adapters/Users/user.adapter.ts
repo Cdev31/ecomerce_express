@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { User } from "./user.interface";
-import { UserModel } from "../../Models/user.model";
+import { UserModel } from "../../Models/Users/User.model";
 import { AppDataSource } from "../../config";
 
 
@@ -13,7 +13,11 @@ export class UserAdapter implements User {
     }
 
     async find() {
-        return await this.Repository.find()
+        return await this.Repository.find({
+            relations: {
+                role: true
+            }
+        })
     }
     
     async findById(id: string) {
@@ -36,7 +40,11 @@ export class UserAdapter implements User {
     }
 
     async findOne(searchTerm){
-        const user = await this.Repository.findBy({ email: searchTerm})
+        const user = await this.Repository
+        .createQueryBuilder('user')
+        .where("user.email = :email", {email: searchTerm })
+        .leftJoinAndSelect("user.role", "role")
+        .getMany()
         return user
     }
 

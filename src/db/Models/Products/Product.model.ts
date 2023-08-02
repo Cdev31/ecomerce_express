@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ImageProductModel } from "./Image-product.model";
+import { CategoryModel } from "./Category.model";
 
 
 @Entity({name: 'products'})
@@ -21,8 +23,8 @@ export class ProductModel {
     })
     description: string
 
-    @Column()
-    images: string
+    @OneToMany(()=> ImageProductModel, (image) => image.belogingProduct)
+    images: ImageProductModel[]
 
     @Column({
         type: "decimal",
@@ -39,8 +41,9 @@ export class ProductModel {
     })
     stock: number
 
-    @Column()
-    category: string
+    @OneToOne(()=> CategoryModel)
+    @JoinColumn()
+    category: CategoryModel
 
     @Column({
         type: "enum",

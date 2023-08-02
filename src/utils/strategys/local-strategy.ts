@@ -11,15 +11,16 @@ const service = new UserService(new UserAdapter())
 export const localStrategy = new Strategy({
     usernameField: 'email',
     passwordField: 'password'
-}, async ( password, email, done )=>{
+}, async ( email, password, done )=>{
+    
     try {
         const user = await service.findByEmail(email)
 
-        if( user.length === 0 ) done('Unauthorized', false)
-
+        if( user.length === 0 ) done(null, false)
+        
         const isPassword = await verifyPassword(password, user[0].password)
 
-        if( isPassword !== true ) done('Unauthorized', false)
+        if( isPassword !== true )  done(null, false)
 
         done( null, user )
 

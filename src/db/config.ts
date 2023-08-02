@@ -1,8 +1,7 @@
 import { DataSource } from "typeorm";
 
 import { config } from '../config/config.env'
-import { ProductModel } from "./Models/product.model";
-import { UserModel } from "./Models/user.model";
+import { ProductModel, UserModel, RoleModel, CategoryModel, ImageProductModel } from "./Models";
 
 let options = {
     dbUrl: config.db_url
@@ -16,7 +15,7 @@ export const AppDataSource = new DataSource({
     type: 'postgres',
     url: options.dbUrl,
     synchronize: true,
-    entities: [ ProductModel, UserModel ]
+    entities: [ ProductModel, UserModel, RoleModel, CategoryModel, ImageProductModel ]
 })
 
 if( config.env === 'dev'){

@@ -1,7 +1,7 @@
 import { Product } from "./product.interface";
 import { AppDataSource } from '../../config'
 import { Repository } from "typeorm";
-import { ProductModel } from "../../Models/product.model";
+import { ProductModel } from "../../Models/Products/Product.model";
 
 
 export class ProductAdapter implements Product {
