@@ -13,7 +13,7 @@ export class ImageProductModel {
     })
     url: string
 
-    @ManyToOne(()=> ProductModel, (product) => product.images)
-    belogingProduct: string
+    @ManyToOne(()=> ProductModel, (product) => product.id)
+    belogingProduct: ProductModel
 
 }

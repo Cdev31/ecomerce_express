@@ -2,7 +2,9 @@ import { Product } from "./product.interface";
 import { AppDataSource } from '../../config'
 import { Repository } from "typeorm";
 import { ProductModel } from "../../Models/Products/Product.model";
+import { FileAdapter } from "../Files/file.adapter";
 
+const fileService = new FileAdapter()
 
 export class ProductAdapter implements Product {
 
@@ -13,7 +15,11 @@ export class ProductAdapter implements Product {
     }
 
     async find(){
-        const products = await this.Repository.find()
+        const products = await this.Repository.find({
+            relations:{
+                images: true
+            }
+        })
         return products
     }
 
@@ -24,12 +30,24 @@ export class ProductAdapter implements Product {
 
     async create( data ){
 
+        const filterProduct = {
+            title: data.title,
+            description: data.description,
+            price: data.price,
+            stock: data.stock,
+            category: data.category,
+            sizes: data.sizes,
+            tags: data.tags
+        }
+
         const newProduct = new ProductModel()
 
-        Object.assign(newProduct, data)
+        Object.assign(newProduct, filterProduct )
 
         const product = await this.Repository.save(newProduct)
         
+        await fileService.createImageProduct(product.id, data.images)
+
         return product
     }
 
@@ -39,7 +57,7 @@ export class ProductAdapter implements Product {
     }
 
     async delete(id){
-        const deleteProduct = await this.Repository.delete({id:id})
+        await this.Repository.delete({id:id})
         return true
     }
 

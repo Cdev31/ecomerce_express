@@ -8,9 +8,10 @@ import passport from 'passport'
 const userRouter = Router()
 const userNetwork = new UserNetwork()
 
+userRouter.use(passport.authenticate('jwt', { session: false }))
 
-userRouter.get('/', 
-passport.authenticate('jwt', { session: false }),
+
+userRouter.get('/',
 async ( _: Request, res: Response )=>{
 
     const { response, message, status } = await userNetwork.find()
@@ -57,5 +58,6 @@ userRouter.delete('/:id', async ( req: Request, res: Response )=>{
 
     res.status(status).json({ response, message })
 } )
+
 
 export { userRouter }
