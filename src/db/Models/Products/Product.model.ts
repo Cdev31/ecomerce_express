@@ -23,7 +23,7 @@ export class ProductModel {
     })
     description: string
 
-    @OneToMany(()=> ImageProductModel, (image) => image.belogingProduct)
+    @OneToMany(()=> ImageProductModel, image => image.product)
     images: ImageProductModel[]
 
     @Column({

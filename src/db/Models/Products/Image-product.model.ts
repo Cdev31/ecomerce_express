@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { ProductModel } from "./Product.model"
 
 @Entity({name: 'product_images'})
@@ -9,11 +9,12 @@ export class ImageProductModel {
 
     @Column({
         type: 'varchar',
-        nullable: false
+        nullable: false,
     })
     url: string
 
-    @ManyToOne(()=> ProductModel, (product) => product.id)
-    belogingProduct: ProductModel
+    @ManyToOne(()=> ProductModel, product => product.images, {nullable: false})
+    @JoinColumn({name: 'product'})
+    product: ProductModel
 
 }

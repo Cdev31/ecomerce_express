@@ -3,14 +3,9 @@ import { CategoryModel } from "../../Models";
 import { AppDataSource } from "../../config";
 
 
-
 export class CategoryAdapater{
 
-    private readonly Repository: Repository<CategoryModel>
-
-    constructor(){
-        this.Repository = AppDataSource.getRepository(CategoryModel)
-    }
+    private readonly Repository: Repository<CategoryModel> = AppDataSource.getRepository(CategoryModel)
 
     async find(){
         return await this.Repository.find()

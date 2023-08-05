@@ -2,6 +2,7 @@ import cors from 'cors'
 
 import { config } from './config/config.env'
 import { createApp }  from './app'
+import './db/config'
 import './utils/strategys'
 
 const app = createApp()

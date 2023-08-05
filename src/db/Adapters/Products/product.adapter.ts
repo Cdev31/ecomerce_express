@@ -1,18 +1,15 @@
 import { Product } from "./product.interface";
 import { AppDataSource } from '../../config'
-import { Repository } from "typeorm";
+import {  QueryRunner, Repository } from "typeorm";
 import { ProductModel } from "../../Models/Products/Product.model";
-import { FileAdapter } from "../Files/file.adapter";
+import { ImageProductModel } from "../../Models";
 
-const fileService = new FileAdapter()
 
 export class ProductAdapter implements Product {
 
-    private readonly Repository: Repository<ProductModel>
+    private readonly Repository: Repository<ProductModel> = AppDataSource.getRepository(ProductModel)
+    private readonly Transaction: QueryRunner = AppDataSource.createQueryRunner()
 
-    constructor(){
-        this.Repository = AppDataSource.getRepository(ProductModel)
-    }
 
     async find(){
         const products = await this.Repository.find({
@@ -29,7 +26,7 @@ export class ProductAdapter implements Product {
     }
 
     async create( data ){
-
+        
         const filterProduct = {
             title: data.title,
             description: data.description,
@@ -39,16 +36,39 @@ export class ProductAdapter implements Product {
             sizes: data.sizes,
             tags: data.tags
         }
-
         const newProduct = new ProductModel()
 
         Object.assign(newProduct, filterProduct )
 
-        const product = await this.Repository.save(newProduct)
-        
-        await fileService.createImageProduct(product.id, data.images)
+        await this.Transaction.connect()
+        await this.Transaction.startTransaction()
 
-        return product
+        try{
+
+            const product = await this.Transaction.manager.save(newProduct)
+
+            for (const image of data.images){
+
+                const newImage = new ImageProductModel()
+
+                Object.assign( newImage,{
+                    ...image,
+                    product: product.id
+                })
+
+                await this.Transaction.manager.save(newImage)
+            }
+
+            await this.Transaction.commitTransaction()
+
+        } catch(error){
+
+            await this.Transaction.rollbackTransaction()
+
+            throw error
+        }
+
+        return data
     }
 
     async update(id,data){

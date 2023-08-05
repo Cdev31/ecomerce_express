@@ -6,12 +6,9 @@ import { Role } from "./role.interface";
 
 export class RoleAdapter implements Role {
 
-    private readonly Repository: Repository<RoleModel>
+    private readonly Repository: Repository<RoleModel> =  AppDataSource.getRepository(RoleModel)
 
-    constructor(){
-        this.Repository = AppDataSource.getRepository(RoleModel)
-    }
-
+  
     async find(){
         return  await this.Repository.find()
     }

@@ -7,18 +7,21 @@ import { AppDataSource } from "../../config";
 
 export class FileAdapter implements Files{
 
-    private readonly Repository: Repository<ImageProductModel>
+    private readonly Repository: Repository<ImageProductModel> = AppDataSource.getRepository(ImageProductModel)
 
-    constructor(){
-        this.Repository = AppDataSource.getRepository(ImageProductModel)
-    }
+
     async createImageProduct( productId: string ,data:any ) {
        let images: any = []
+
        for (const image of data){
-            const newImage = Object.assign( new ImageProductModel(), {
-                belogingProduct: productId,
-                ...image
+
+            const newImage = new ImageProductModel()
+          
+            Object.assign( newImage , {
+                ...image,
+                product: productId
             })
+            console.log(newImage)
             const savedImages = await this.Repository.save(newImage)
             images.push(savedImages)
         }

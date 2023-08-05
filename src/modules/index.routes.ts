@@ -6,11 +6,13 @@ import { authRouter } from "./Auth/router";
 import { fileRouter } from "./Files/router";
 import { roleRouter } from "./Role/router";
 import { categoryRouter } from "./Categories/router";
+import { orderRouter } from "./Order/router";
 
 
 export const RouterApi = (app: Application)=>{
     const router = Router()
     router.use('/products', productRouter )
+    router.use('/orders', orderRouter )
     router.use('/categories', categoryRouter )
     router.use('/users', userRouter )
     router.use('/role', roleRouter )
